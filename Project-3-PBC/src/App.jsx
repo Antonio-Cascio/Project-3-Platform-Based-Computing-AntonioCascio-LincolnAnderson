@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getRandomPlayer, searchPlayers } from "./api/mockPlayers";
 import createGame from "./Game/game";
+import "./App.css";
 
 export default function App(){
 
@@ -15,39 +16,25 @@ export default function App(){
     const target = getRandomPlayer();
     setGame(createGame(target));
   }, []);
-
-
-
-    function handleSearch(e){
+    function UpdateQueryImput(e){
       const value = e.target.value;
       setQuery(value);
-
       if(!value){
         setSuggestions([]);
         return;
       }
-      
-
       const results = searchPlayers(value);
       setSuggestions(results);
-
-
     }
-
-
-  function handleGuess(player) {
+  function submitPlayerGuess(player) {
     if (!game || won || lose) return;
-
-
     const feedback = game.makeGuess(player);
     setQuery("");
     setSuggestions([]);
     setAttempts(attempts + 1);
-
     if (attempts + 1 > 5) {
     setLose(true);
   }
-
     if (
       feedback.team &&
       feedback.conference &&
@@ -59,7 +46,6 @@ export default function App(){
       setWon(true)
     }
   }
-
   function playAgain(){
     const target = getRandomPlayer();
     setGame(createGame(target));
@@ -71,17 +57,21 @@ export default function App(){
   }
 
   if (!game) return <p>Loading game...</p>;
-
-
+// I changed the title and our names to look better
   return (
-    <div style={{ maxWidth: "1500px", margin: "0 auto", padding: "1rem",  }}>
-      <h1>NBA Wordle by Antonio Cascio and Lincoln Anderson</h1>
-      <h2>(Mock API)</h2>
+    <div style={{ maxWidth: "1500px", margin: "0 auto", padding: "1rem" }}>
+    <h1 style={{ marginBottom: "0.2rem" }}>NBA Wordle</h1>
+    <p style={{ fontSize: "1rem", fontWeight: "normal", marginTop: 0 }}>
+      by Antonio Cascio and Lincoln Anderson
+    </p>
+    {/* Im not sure if you wanted to keep this but i didn't think it made sense for the final product */}
+    {/* So i commented it out */}
+    {/* <h3 style={{ fontWeight: "normal", marginTop: "0.5rem" }}>(Mock API)</h3> */}
 
       <input
         type="text"
         value={query}
-        onChange={handleSearch}
+        onChange={UpdateQueryImput}
         placeholder="Search for a player..."
         style={{ width: "100%", padding: "0.5rem", marginBottom: "1rem" }}
       />
@@ -91,7 +81,7 @@ export default function App(){
         {suggestions.map((p) => (
           <li
             key={p.id}
-            onClick={() => handleGuess(p)}
+            onClick={() => submitPlayerGuess(p)}
             style={{
               padding: "0.5rem",
               borderBottom: "1px solid #ccc",
@@ -105,24 +95,60 @@ export default function App(){
 
       {/* Attempts */}
       <h2>Attempts</h2>
+
       {game.attempts.length === 0 && <p>No guesses yet.</p>}
-      {game.attempts.map((a, i) => (
-        <div
-          key={i}
-          style={{
-            padding: "0.5rem",
-            borderBottom: "1px solid #eee",
-            marginBottom: "0.5rem",
-          }}
-        >
-          <strong>
-            {a.guessPlayer.first_name} {a.guessPlayer.last_name}
-          </strong>
-          <pre style={{ margin: 0 }}>
-            {JSON.stringify(a.feedback, null, 2)}
-          </pre>
-        </div>
-      ))}
+{/* I made it so it shows each attempt, and labeled name, team conference, etc.. */}
+{/* I also made it horizontal because it looked a lot better, so i used div */}
+<div className="result-row" style={{ justifyContent: "flex-start", marginBottom: "0.5rem" }}>
+  <div style={{ width: "30px", fontWeight: "bold" }}>#</div>
+  <div style={{ width: "200px", fontWeight: "bold" }}>Name</div>
+  <div className="result-box" style={{ fontWeight: "bold" }}>Team</div>
+  <div className="result-box" style={{ fontWeight: "bold" }}>Conference</div>
+  <div className="result-box" style={{ fontWeight: "bold" }}>Division</div>
+  <div className="result-box" style={{ fontWeight: "bold" }}>Position</div>
+  <div className="result-box" style={{ fontWeight: "bold" }}>Height</div>
+</div>
+
+    {game.attempts.map((a, i) => (
+  <div
+    key={i}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      padding: "0.5rem",
+      borderBottom: "1px solid #eee",
+      marginBottom: "0.5rem",
+      gap: "10px"
+    }}
+  >
+    {/* Attempt number */}
+    <div style={{ fontWeight: "bold", width: "30px" }}>{i + 1}.</div>
+
+    {/* Player name */}
+    <div style={{ width: "200px" }}>
+      {a.guessPlayer.first_name} {a.guessPlayer.last_name}
+    </div>
+
+    {/* Feedback boxes */}
+    <div className="result-row">
+      <div className={`result-box ${a.feedback.team ? 'true' : 'false'}`}>
+        {a.guessPlayer.team.full_name}
+      </div>
+      <div className={`result-box ${a.feedback.conference ? 'true' : 'false'}`}>
+        {a.guessPlayer.team.conference}
+      </div>
+      <div className={`result-box ${a.feedback.division ? 'true' : 'false'}`}>
+        {a.guessPlayer.team.division}
+      </div>
+      <div className={`result-box ${a.feedback.position ? 'true' : 'false'}`}>
+        {a.guessPlayer.position}
+      </div>
+      <div className={`result-box ${a.feedback.height ? 'true' : 'false'}`}>
+        {a.guessPlayer.height_feet}
+      </div>
+    </div>
+  </div>
+))}
       {won && (
       <button 
         onClick={playAgain}
