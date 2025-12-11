@@ -1,4 +1,4 @@
-import players from "../mock-API-data/players.json";
+import players from "../mock-API-Data/players.json";
 
 export function getRandomPlayer() {
 
