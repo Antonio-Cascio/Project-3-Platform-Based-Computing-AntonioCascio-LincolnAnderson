@@ -18,14 +18,66 @@ export default function createGame(targetplayer) {
 }
 
 function comparePlayers(guess, target) {
+
+
+    let teamMatch = false;
+    let conferenceMatch = false;
+    let divisionMatch = false;
+    let positionMatch = false;
+    let heightMatch = false;
+
+
+    if (guess.team && target.team) {
+        if (guess.team.full_name === target.team.full_name) {
+            teamMatch = true;
+    }
+
+
+    }
+
+
+
+    if (guess.team && target.team) {
+        if (guess.team.conference === target.team.conference) {
+            conferenceMatch = true;
+        }
+
+    }
+
+
     
+    if (guess.team && target.team) {
+        if (guess.team.division === target.team.division) {
+            divisionMatch = true;
+        }
+
+    }
+
+    if (guess.position && target.position) {
+        if (guess.position === target.position) {
+            positionMatch = true;
+        }
+
+    }
+
+
+
+    if (guess.height_feet && target.height_feet) {
+        if (guess.height_feet === target.height_feet) {
+            heightMatch = true;
+        }
+    }
+
+
   return {
 
-    team: guess.team?.full_name === target.team?.full_name,
-    conference: guess.team?.conference === target.team?.conference,
-    division: guess.team?.division === target.team?.division,
-    position: guess.position === target.position,
-    height: guess.height_feet === target.height_feet,
+    team: teamMatch,
+    conference: conferenceMatch,
+    division: divisionMatch,
+    position: positionMatch,
+    height: heightMatch
+
+
 
 
   };

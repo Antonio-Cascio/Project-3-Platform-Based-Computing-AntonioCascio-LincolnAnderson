@@ -16,6 +16,8 @@ export default function App(){
     const target = getRandomPlayer();
     setGame(createGame(target));
   }, []);
+
+
     function UpdateQueryImput(e){
       const value = e.target.value;
       setQuery(value);
@@ -26,6 +28,8 @@ export default function App(){
       const results = searchPlayers(value);
       setSuggestions(results);
     }
+
+
   function submitPlayerGuess(player) {
     if (!game || won || lose) return;
     const feedback = game.makeGuess(player);
@@ -36,17 +40,27 @@ export default function App(){
     setLose(true);
   }
     if (
+
       feedback.team &&
       feedback.conference &&
       feedback.division &&
       feedback.position &&
       feedback.height
+
+
     ) {
+
       alert(`You guessed correctly! It was ${player.first_name} ${player.last_name}`);
       setWon(true)
     }
+
+
   }
+
+  
   function playAgain(){
+
+
     const target = getRandomPlayer();
     setGame(createGame(target));
     setWon(false);
@@ -54,19 +68,23 @@ export default function App(){
     setAttempts(0);
     setQuery("");
     setSuggestions([]);
+
   }
 
   if (!game) return <p>Loading game...</p>;
+
+  
 // I changed the title and our names to look better
+
+
   return (
+
     <div style={{ maxWidth: "1500px", margin: "0 auto", padding: "1rem" }}>
     <h1 style={{ marginBottom: "0.2rem" }}>NBA Wordle</h1>
     <p style={{ fontSize: "1rem", fontWeight: "normal", marginTop: 0 }}>
       by Antonio Cascio and Lincoln Anderson
     </p>
-    {/* Im not sure if you wanted to keep this but i didn't think it made sense for the final product */}
-    {/* So i commented it out */}
-    {/* <h3 style={{ fontWeight: "normal", marginTop: "0.5rem" }}>(Mock API)</h3> */}
+
 
       <input
         type="text"
@@ -110,6 +128,8 @@ export default function App(){
 </div>
 
     {game.attempts.map((a, i) => (
+
+
   <div
     key={i}
     style={{
@@ -120,13 +140,19 @@ export default function App(){
       marginBottom: "0.5rem",
       gap: "10px"
     }}
+
+
   >
     {/* Attempt number */}
+
     <div style={{ fontWeight: "bold", width: "30px" }}>{i + 1}.</div>
 
     {/* Player name */}
+
     <div style={{ width: "200px" }}>
+
       {a.guessPlayer.first_name} {a.guessPlayer.last_name}
+
     </div>
 
     {/* Feedback boxes */}
